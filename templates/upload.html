@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/upload.css" ">
+  </head>
+  <body>
+    <header class="header">
+      <nav class="navbar">
+        <a href="{{url_for('home')}}" class="nav-logo"
+          ><img src="/static/face-scan.gif " alt=": (" />
+        </a>
+      </nav>
+    </header>
+
+    <!-- body starts from here of front page  -->
+
+    <div class="container">
+      <div class="content">
+        <img src="/static/facial-expression.png" id="image" alt="" />
+
+        <label for="input_image" class="btn btn__hero">Upload Image</label>
+        <input
+          type="file"
+          accept="image/jpg , image/png ,image/jpeg"
+          id="input_image"
+        />
+      </div>
+    </div>
+    <script>
+      let pic = document.getElementById("image");
+      let uploadimg = document.getElementById("input_image");
+
+      uploadimg.onchange = function () {
+        pic.src = URL.createObjectURL(uploadimg.files[0]);
+      };
+    </script>
+  </body>
+</html>

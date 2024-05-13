@@ -4,7 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="/static/upload.css" ">
+    <link rel="stylesheet" href="/static/upload.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11" />
+    <style>
+      .my-swal-title {
+        font-size: 40px; /* Adjust the font size for title */
+      }
+
+      .my-swal-text {
+        font-size: 30px; /* Adjust the font size for text content */
+      }
+    </style>
   </head>
   <body>
     <header class="header">
@@ -21,14 +31,27 @@
       <div class="content">
         <img src="/static/facial-expression.png" id="image" alt="" />
 
-        <label for="input_image" class="btn btn__hero">Upload Image</label>
-        <input
-          type="file"
-          accept="image/jpg , image/png ,image/jpeg"
-          id="input_image"
-        />
+        <form
+          style="align-content: center; display: grid"
+          action="{{url_for('upload_image')}}"
+          method="POST"
+          enctype="multipart/form-data"
+          enctype="multipart/form-data"
+        >
+          <label for="input_image" class="btn btn__hero">Browse</label>
+          <input
+            type="file"
+            accept="image/jpg , image/png ,image/jpeg"
+            id="input_image"
+            name="file"
+          />
+          <button class="btn btn__hero">
+            <input style="display: none" type="submit" />Upload
+          </button>
+        </form>
       </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
       let pic = document.getElementById("image");
       let uploadimg = document.getElementById("input_image");
@@ -36,6 +59,22 @@
       uploadimg.onchange = function () {
         pic.src = URL.createObjectURL(uploadimg.files[0]);
       };
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const output = "{{ output | safe }}";
+        if (output !== "") {
+          Swal.fire({
+            title: "Face Recognition",
+            text: `Predicted A: ${output}`,
+            icon: "success",
+            confirmButtonText: "OK",
+            customClass: {
+              title: "my-swal-title", // Apply custom class to Swal title
+              text: "my-swal-text", // Apply custom class to Swal content
+            },
+          });
+        }
+      });
     </script>
   </body>
 </html>

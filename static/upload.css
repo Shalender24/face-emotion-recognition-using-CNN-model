@@ -29,7 +29,7 @@ a {
   justify-content: center;
 }
 .content {
-  width: 400px;
+  width: 40vw;
   text-align: center;
   align-content: center;
   border-radius: 20px;
@@ -41,13 +41,14 @@ a {
 }
 img {
   padding: 15px;
-  height: 350px;
+  height: 25vh;
   margin: 20px;
   border-radius: 20px;
-  width: 250px;
+  width: 15vw;
 
   /* align-content: center; */
 }
+
 .btn {
   border-radius: 0.5rem;
   padding: 1.2rem;

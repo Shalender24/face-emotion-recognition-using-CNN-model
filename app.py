@@ -50,6 +50,58 @@ def upload_image():
             # print("gimage")
             return render_template('upload.html',output = labels[predict.argmax()])
 
+def predict_emotion(image):
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    faces = face_cascade.detectMultiScale(image, 1.3, 5)
+    try:
+        for p, q, r, s in faces:
+            face_image = gray[q : q + s, p : p + r]
+            face_image = cv2.resize(face_image, (48, 48))
+            img = extract_features(face_image)
+            img=np.array(img)
+            img=img.reshape(1,48,48,1)
+            img=img/255.0
+            
+            prediction_label = labels[pred.argmax()]
+            cv2.rectangle(
+                image, (p, q), (p + r, q + s), (255, 0, 0), 2
+            )  # Draw rectangle around face
+            cv2.putText(
+                image,
+                prediction_label,
+                (p - 10, q - 10),
+                cv2.FONT_HERSHEY_COMPLEX_SMALL,
+                2,
+                (0, 0, 255),
+            )
+        return image
+    except cv2.error:
+        return None
+
+def generate_frames():
+    camera = cv2.VideoCapture(
+        0
+    )  # Change the argument if using a different camera source
+
+    while True:
+        success, frame = camera.read()
+        if not success:
+            break
+
+        processed_frame = predict_emotion(frame)  # Process the frame to predict emotion
+
+        if processed_frame is not None:
+            ret, buffer = cv2.imencode(".jpg", processed_frame)
+            frame = buffer.tobytes()
+
+            yield (b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n")
+
+    camera.release()
+
+
+@app.route('/vedio-feed')
+def vedio_feed():
+    return Response(generate_frames(), mimetype="multipart/x-mixed-replace; boundary=frame")
 
 
 if __name__=='__main__':
